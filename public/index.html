@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horizon</title>
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="/tailwind.css" />
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Custom Top Tours Layout Override */
+        .custom-tours-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem; /* 32px */
+            align-items: center;
+            width: 100%;
+        }
+
+        .custom-tour-card {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            width: 100%;
+            max-width: 400px; /* Mobile width cap */
+        }
+
+        .custom-tour-image-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 1.25rem;
+        }
+
+        .custom-tour-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .custom-tour-card:hover .custom-tour-image-container img {
+            transform: scale(1.05);
+        }
+
+        /* Desktop Layout (lg breakpoint) */
+        @media (min-width: 1024px) {
+            .custom-tours-wrapper {
+                flex-direction: row;
+                justify-content: center; /* Center to keep them close */
+                align-items: center; /* Vertically center the satellites */
+                gap: 2.5rem; /* Fixed tight gap */
+            }
+
+            /* Side Cards (Satellites) */
+            .custom-tour-card.side-card {
+                width: 260px; /* Fixed width */
+                flex-shrink: 0; /* Prevent shrinking */
+            }
+
+            .custom-tour-card.side-card .custom-tour-image-container {
+                height: 300px; /* Fixed height */
+                border-radius: 1.5rem;
+            }
+
+            /* Center Card (Hero) */
+            .custom-tour-card.center-card {
+                flex: 1; /* Take remaining space */
+                max-width: none; /* Remove mobile cap */
+            }
+
+            .custom-tour-card.center-card .custom-tour-image-container {
+                height: 500px; /* Much taller */
+                border-radius: 2rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .custom-tour-card h3 {
+               /* Ensure title sizing logic applies */
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+    <!-- Header / Hero Section -->
+    <header class="relative min-h-screen lg:h-screen lg:min-h-[700px] flex flex-col justify-between" style="background: url('/assets/plage-soleil-luxe-baie-parfaite_1232-4212.avif') center/cover no-repeat;">
+        <!-- Overlay -->
+        <div class="absolute inset-0 bg-black/30"></div>
+
+        <!-- Navigation -->
+        <nav class="relative z-50 w-full px-6 py-8">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <!-- Logo -->
+                <div class="text-3xl font-bold text-white tracking-wide">Horizon</div>
+                
+                <!-- Desktop Menu -->
+                <ul class="hidden md:flex items-center space-x-10 font-medium">
+                    <li><a href="#" class="text-white transition-colors">Home</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Explore</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Blog</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-white transition-colors">About Us</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Contact</a></li>
+                </ul>
+
+                <!-- Auth Buttons -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#" class="text-white font-medium hover:text-gray-200 transition-colors">Log In</a>
+                    <a href="#" class="bg-white text-gray-900 px-6 py-2.5 rounded-full font-semibold hover:bg-gray-100 transition-colors shadow-lg">Register</a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-toggle" class="md:hidden text-white text-2xl focus:outline-none">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Dropdown Menu -->
+            <div id="mobile-menu" class="hidden w-full bg-white shadow-xl z-50 rounded-2xl md:hidden overflow-hidden mt-4 transition-all duration-300 ease-in-out origin-top transform">
+                <div class="flex flex-col px-6 py-6 space-y-4">
+                    <a href="#" class="text-gray-900 font-medium hover:text-gray-600 block py-2 border-b border-gray-100">Home</a>
+                    <a href="#" class="text-gray-900 font-medium hover:text-gray-600 block py-2 border-b border-gray-100">Explore</a>
+                    <a href="#" class="text-gray-900 font-medium hover:text-gray-600 block py-2 border-b border-gray-100">Blog</a>
+                    <a href="#" class="text-gray-900 font-medium hover:text-gray-600 block py-2 border-b border-gray-100">About Us</a>
+                    <a href="#" class="text-gray-900 font-medium hover:text-gray-600 block py-2 border-b border-gray-100">Contact</a>
+                    
+                    <div class="pt-4 flex flex-col space-y-3">
+                        <a href="#" class="text-center text-gray-900 font-semibold py-2 hover:bg-gray-50 rounded-lg">Log In</a>
+                        <a href="#" class="bg-gray-900 text-white px-6 py-3 rounded-full font-bold text-center hover:bg-gray-800 transition-colors shadow-md">Register</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Content -->
+        <div class="relative z-10 flex-grow flex items-center px-6">
+            <div class="max-w-7xl mx-auto w-full">
+                <div class="max-w-3xl">
+                    <h1 class="text-4xl md:text-5xl lg:text-7xl font-bold text-white leading-[1.1] mb-8 drop-shadow-md">
+                        Breathe Easy. Find <br>
+                        Beauty in Simplicity.
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-100 mb-10 max-w-xl leading-relaxed drop-shadow-sm">
+                        Horizon helps you slow down and savor the journey. From peaceful stays to hidden local gems, we make travel feel effortless—so you can focus on what truly matters.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom spacing for visual balance similar to design -->
+        <div class="h-20"></div>
+    </header>
+
+    <!-- About Us Section -->
+    <section class="py-24 bg-white">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <!-- Icon & Heading -->
+            <div class="inline-flex items-center justify-center space-x-3 mb-6">
+                <svg class="w-6 h-6 text-gray-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 6 L15 12 L9 18 L3 12 Z" />
+                    <path d="M15 6 L21 12 L15 18 L9 12 Z" />
+                </svg>
+                <h2 class="text-xl font-bold text-gray-900">About us</h2>
+            </div>
+            
+            <p class="text-gray-500 text-xl md:text-2xl leading-relaxed mb-16 max-w-3xl mx-auto">
+                At Horizon, we’re more than a travel platform. we’re your companion in every journey. From quick getaways to dream adventures, we make travel simple and memorable.
+            </p>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-y-12 lg:gap-y-0 border-t border-gray-100 pt-12">
+                <div class="text-center px-4 border-r border-gray-300">
+                    <div class="text-4xl md:text-5xl font-bold text-gray-900 mb-2">200+</div>
+                    <div class="text-sm text-gray-500 uppercase tracking-wider font-medium">Happy Customer</div>
+                </div>
+                <div class="text-center px-4 lg:border-r lg:border-gray-300">
+                    <div class="text-4xl md:text-5xl font-bold text-gray-900 mb-2">65+</div>
+                    <div class="text-sm text-gray-500 uppercase tracking-wider font-medium">Top Hotels</div>
+                </div>
+                <div class="text-center px-4 border-r border-gray-300">
+                    <div class="text-4xl md:text-5xl font-bold text-gray-900 mb-2">165+</div>
+                    <div class="text-sm text-gray-500 uppercase tracking-wider font-medium">Experienced Guide</div>
+                </div>
+                <div class="text-center px-4">
+                    <div class="text-4xl md:text-5xl font-bold text-gray-900 mb-2">85+</div>
+                    <div class="text-sm text-gray-500 uppercase tracking-wider font-medium">Active project</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Accommodation Near You -->
+    <section class="py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Popular Accommodation Near You</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto text-lg">Find top-rated stays nearby, handpicked for comfort, convenience, and great reviews.</p>
+            </div>
+
+            <!-- Carousel / Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 group cursor-pointer">
+                    <div class="relative h-72 overflow-hidden">
+                        <img src="assets/voyage-lever-soleil-montagne-riviere-campagne_1417-411.avif" alt="Ibis Styles Malang" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    </div>
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold text-gray-900">Ibis Styles Malang</h3>
+                            <div class="flex items-center text-yellow-400 text-sm font-bold bg-gray-50 px-2 py-1 rounded">
+                                <i class="fas fa-star mr-1"></i>
+                                <span class="text-gray-900">4.8</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-gray-500 text-sm mb-6">
+                            <i class="fas fa-map-marker-alt mr-2 text-gray-400"></i>
+                            <span>Lowokwaru, Malang</span>
+                        </div>
+                        <div class="flex items-baseline space-x-1">
+                            <span class="text-xl font-bold text-gray-900">IDR 350.000</span>
+                            <span class="text-gray-400 text-sm">/ night</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 group cursor-pointer">
+                    <div class="relative h-72 overflow-hidden">
+                        <img src="assets/belle-vue-baie-aigua-blava-capturee-espagne_181624-47900.avif" alt="Grand Mercure" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    </div>
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold text-gray-900">Grand Mercure</h3>
+                            <div class="flex items-center text-yellow-400 text-sm font-bold bg-gray-50 px-2 py-1 rounded">
+                                <i class="fas fa-star mr-1"></i>
+                                <span class="text-gray-900">4.9</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-gray-500 text-sm mb-6">
+                            <i class="fas fa-map-marker-alt mr-2 text-gray-400"></i>
+                            <span>Sukun, Malang</span>
+                        </div>
+                        <div class="flex items-baseline space-x-1">
+                            <span class="text-xl font-bold text-gray-900">IDR 550.000</span>
+                            <span class="text-gray-400 text-sm">/ night</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 group cursor-pointer">
+                    <div class="relative h-72 overflow-hidden">
+                        <img src="assets/belle-plage-diamants-ile-penida-bali-indonesie_181624-41884.avif" alt="Harris Hotel" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    </div>
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold text-gray-900">Harris Hotel</h3>
+                            <div class="flex items-center text-yellow-400 text-sm font-bold bg-gray-50 px-2 py-1 rounded">
+                                <i class="fas fa-star mr-1"></i>
+                                <span class="text-gray-900">4.7</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-gray-500 text-sm mb-6">
+                            <i class="fas fa-map-marker-alt mr-2 text-gray-400"></i>
+                            <span>Blimbing, Malang</span>
+                        </div>
+                         <div class="flex items-baseline space-x-1">
+                            <span class="text-xl font-bold text-gray-900">IDR 420.000</span>
+                            <span class="text-gray-400 text-sm">/ night</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="py-24 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <!-- Centered Header -->
+            <div class="flex flex-col items-center text-center mb-16">
+                 <div class="flex items-center justify-center text-gray-900 mb-4 gap-3">
+                    <svg class="w-6 h-6 text-gray-900 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 6 L15 12 L9 18 L3 12 Z" />
+                        <path d="M15 6 L21 12 L15 18 L9 12 Z" />
+                    </svg>
+                    <span class="font-bold text-xl text-gray-900 whitespace-nowrap">Why Choose Us</span>
+                </div>
+                <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">Trusted by Travelers. Built for You</h2>
+            </div>
+
+            <div class="flex flex-col lg:flex-row items-center gap-20">
+                <!-- Image Section -->
+                <div class="lg:w-1/2 relative">
+                    <!-- Simplified representation of the collage in the design -->
+                    <div class="relative z-10 rounded-3xl overflow-hidden shadow-2xl transform rotate-2 lg:rotate-0 hover:rotate-0 transition duration-500">
+                        <img src="assets/13.Ubigi-Blog-Hawaii-USA-Lodges-1024x576.jpg" alt="Resort" class="w-full h-auto object-cover">
+                    </div>
+                     <!-- Decorative backdrop -->
+                     <div class="absolute -top-10 -left-10 w-full h-full bg-gray-100 rounded-3xl -z-10 hidden lg:block"></div>
+                </div>
+
+                <!-- Content Section -->
+                <div class="lg:w-1/2">
+                    <div class="space-y-2">
+                        <!-- Accordion Item 1 (Active) -->
+                        <div class="border-b border-gray-100 pb-6 group cursor-pointer">
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="font-bold text-gray-900 text-lg">Expert Guidance, Unforgettable Journeys</h3>
+                                <div class="w-6 h-6 flex items-center justify-center rounded-full border border-gray-300 group-hover:bg-gray-900 group-hover:text-white transition-colors">
+                                    <i class="fas fa-arrow-up text-xs"></i>
+                                </div>
+                            </div>
+                            <p class="text-gray-500 leading-relaxed pr-8">With Horizon, every trip is backed by local insight and smart planning, so you can focus on making memories, not managing details.</p>
+                        </div>
+                        
+                        <!-- Accordion Item 2 -->
+                        <div class="border-b border-gray-100 py-4 group cursor-pointer">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-medium text-gray-600 text-lg group-hover:text-gray-900 transition-colors">Expertly Curated Adventures</h3>
+                                <div class="w-6 h-6 flex items-center justify-center rounded-full border border-gray-300 group-hover:border-gray-900 transition-colors">
+                                    <i class="fas fa-arrow-down text-xs text-gray-400 group-hover:text-gray-900"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Accordion Item 3 -->
+                        <div class="border-b border-gray-100 py-4 group cursor-pointer">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-medium text-gray-600 text-lg group-hover:text-gray-900 transition-colors">Nature-focused journeys</h3>
+                                <div class="w-6 h-6 flex items-center justify-center rounded-full border border-gray-300 group-hover:border-gray-900 transition-colors">
+                                    <i class="fas fa-arrow-down text-xs text-gray-400 group-hover:text-gray-900"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                         <!-- Accordion Item 4 -->
+                         <div class="border-b border-gray-100 py-4 group cursor-pointer">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-medium text-gray-600 text-lg group-hover:text-gray-900 transition-colors">Unforgettable Travel Solutions</h3>
+                                <div class="w-6 h-6 flex items-center justify-center rounded-full border border-gray-300 group-hover:border-gray-900 transition-colors">
+                                    <i class="fas fa-arrow-down text-xs text-gray-400 group-hover:text-gray-900"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                         <!-- Accordion Item 5 -->
+                         <div class="border-b border-gray-100 py-4 group cursor-pointer">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-medium text-gray-600 text-lg group-hover:text-gray-900 transition-colors">Local Gems, Global Reach</h3>
+                                <div class="w-6 h-6 flex items-center justify-center rounded-full border border-gray-300 group-hover:border-gray-900 transition-colors">
+                                    <i class="fas fa-arrow-down text-xs text-gray-400 group-hover:text-gray-900"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Top Tours Section -->
+    <section class="py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <!-- Header -->
+            <div class="flex flex-col lg:flex-row justify-between items-start mb-16">
+                <!-- Left: Label -->
+                <div class="mb-8 lg:mb-0">
+                    <div class="flex items-center text-gray-900">
+                        <svg class="w-6 h-6 mr-4 text-gray-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 6 L15 12 L9 18 L3 12 Z" />
+                            <path d="M15 6 L21 12 L15 18 L9 12 Z" />
+                        </svg>
+                        <span class="font-bold text-xl">Top Tours</span>
+                    </div>
+                </div>
+
+                <!-- Right: Content -->
+                <div class="lg:w-1/2">
+                    <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">Top tours to spark your wanderlust</h2>
+                    <p class="text-gray-500 text-lg mb-8">Find top-rated stays nearby, handpicked for comfort, convenience and great reviews.</p>
+                     <a href="#" class="inline-flex items-center font-bold text-gray-900 border-b-2 border-gray-900 hover:text-gray-600 hover:border-gray-600 transition pb-1 text-lg">
+                        See More
+                        <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                     </a>
+                </div>
+            </div>
+
+            <!-- Cards -->
+            <div class="custom-tours-wrapper">
+                <!-- Tour 1 -->
+                <div class="custom-tour-card side-card group">
+                    <div class="custom-tour-image-container mb-5 h-[280px]">
+                        <img src="assets/free-photo-of-la-cascade-de-skogafoss-dans-le-paysage-pittoresque-de-l-islande.jpeg" class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105" alt="Rocky Mountain">
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 leading-tight mb-3 w-full">Rocky Mountain Adventure</h3>
+                    <div class="w-full text-center border border-gray-300 px-6 py-3 rounded-full text-sm font-bold text-gray-900 bg-white hover:bg-gray-50 transition-colors uppercase tracking-wide">
+                        From $750
+                    </div>
+                </div>
+
+                <!-- Tour 2 (Center / Wider) -->
+                <div class="custom-tour-card center-card group">
+                    <div class="custom-tour-image-container mb-6 h-[400px]">
+                        <img src="assets/backpacker-debout-point-vue-du-lever-du-soleil-au-village-ja-bo-province-mae-hong-son-thailande_335224-1356.avif" class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105" alt="Santorini">
+                    </div>
+                    <h3 class="text-3xl font-bold text-gray-900 leading-tight mb-4">Satorni Sunset Escape</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed max-w-lg mb-6">
+                        Visit historic landmarks like Krinkuku-Ji and Fushimi inari shrine with an expert guide.
+                    </p>
+                    <div class="w-full text-center border border-gray-300 px-6 py-3 rounded-full text-sm font-bold text-gray-900 bg-white hover:bg-gray-50 transition-colors uppercase tracking-wide">
+                        From $950
+                    </div>
+                </div>
+
+                <!-- Tour 3 -->
+                <div class="custom-tour-card side-card group">
+                    <div class="custom-tour-image-container mb-5 h-[280px]">
+                        <img src="https://images.unsplash.com/photo-1549144511-f099e773c147?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105" alt="Paris">
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 leading-tight mb-3 w-full">Paris City Tour</h3>
+                    <div class="w-full text-center border border-gray-300 px-6 py-3 rounded-full text-sm font-bold text-gray-900 bg-white hover:bg-gray-50 transition-colors uppercase tracking-wide">
+                        From $750
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="relative py-32 bg-cover bg-center bg-fixed" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+        <div class="absolute inset-0 bg-black/60"></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl font-bold text-white mb-4">What People Say About Us</h2>
+                <p class="text-gray-300 text-lg max-w-2xl mx-auto">Find top-rated stays nearby, handpicked for confident, convenience, and great reviews.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white p-10 rounded-3xl shadow-xl transform hover:-translate-y-2 transition duration-300">
+                    <h3 class="font-bold text-xl mb-4 text-gray-900">"Felt like a local, not a tourist."</h3>
+                    <p class="text-gray-500 mb-8 leading-relaxed">The nearby travel guides Horizon suggested made my solo trip so much more exciting. I discovered places I never would have found on my own.</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" class="w-12 h-12 rounded-full mr-4 border-2 border-gray-100">
+                        <div>
+                            <div class="font-bold text-gray-900">Bessie Cooper</div>
+                            <div class="text-sm text-gray-400">USA</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-white p-10 rounded-3xl shadow-xl transform hover:-translate-y-2 transition duration-300">
+                    <h3 class="font-bold text-xl mb-4 text-gray-900">"A smooth experience from start finish!"</h3>
+                    <p class="text-gray-500 mb-8 leading-relaxed">Horizon helped me find a peaceful getaway with zero stress. The booking process was so easy, and the recommendations were spot on.</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="w-12 h-12 rounded-full mr-4 border-2 border-gray-100">
+                        <div>
+                            <div class="font-bold text-gray-900">Albert Flores</div>
+                            <div class="text-sm text-gray-400">UK</div>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Testimonial 3 -->
+                 <div class="bg-white p-10 rounded-3xl shadow-xl transform hover:-translate-y-2 transition duration-300">
+                    <h3 class="font-bold text-xl mb-4 text-gray-900">"Exceptional Service and hidden gems!"</h3>
+                    <p class="text-gray-500 mb-8 leading-relaxed">I booked a last-minute and still got incredible value. Their team even helped me adjust my plans quickly when my schedule changed.</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="User" class="w-12 h-12 rounded-full mr-4 border-2 border-gray-100">
+                        <div>
+                            <div class="font-bold text-gray-900">Emily Edwards</div>
+                            <div class="text-sm text-gray-400">Australia</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Simple -->
+    <footer class="bg-gray-900 text-white py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+             <div class="text-2xl font-bold tracking-wide mb-4">Horizon</div>
+             <p class="text-gray-500 text-sm">© 2026 Horizon. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const btn = document.getElementById('mobile-menu-toggle');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
